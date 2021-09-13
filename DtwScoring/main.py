@@ -12,6 +12,7 @@ import concurrent.futures
 from zipfile import ZipFile
 import os
 from os.path import basename
+from os import path
 
 def zip_json_files(zip_file_path, directory_to_zip):
   # create a ZipFile object
@@ -54,19 +55,39 @@ def compute_cost(aar1, arr2):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    path_to_json_expert = sys.argv[1] 
-    path_to_json_patient = sys.argv[2]
-    vector_arrays_expert = vector_arrays_from_json(path_to_json_expert) #convert JSON to 50 (25 vertexes, X,Y total 50) 1D arrays that are normalized
-    vector_arrays_patient = vector_arrays_from_json(path_to_json_patient)
+
+
+    try:
+        path_to_json_expert = sys.argv[1]
+        path_to_json_patient = sys.argv[2]
+    except:
+        print("There was no arguments so I use Yoram default folders")
+        '''
+        path_to_json_expert = "./JsonsFromOp/Expert"
+        path_to_json_patient = "./JsonsFromOp/Patient"
+        '''
+        # C:\24D\CzechData\Data\00001AFR\Expert\Json
+        base_json_path = os.path.join("C:\\", "24D", "CzechData", "Data")
+        selected_exercise = "00001AFR"
+        json_exercise = os.path.join(base_json_path,selected_exercise)
+        path_to_json_expert = os.path.join(json_exercise, "Expert", "Json")
+        path_to_json_patient = os.path.join(json_exercise,"Patient","Json")
+
+        #convert JSON to 50 (25 vertices, X, Y total 50) 1D arrays that are normalized
+        vector_arrays_expert = vector_arrays_from_json(path_to_json_expert)
+        vector_arrays_patient = vector_arrays_from_json(path_to_json_patient)
     
     distances = []
-    os.mkdir(os.path.join(path_to_json_patient,"twoLineGraph"))
+
+    if not path.exists(os.path.join(path_to_json_patient,"twoLineGraph")):
+        os.mkdir(os.path.join(path_to_json_patient,"twoLineGraph"))
     for i in range(len(vector_arrays_expert)):
         twoline_file = os.path.join(path_to_json_patient,"twoLineGraph", "lineNum_" + str(i+1) +".png")
         chart.compare_tow_line(vector_arrays_expert[i], vector_arrays_patient[i], twoline_file)
     print(zip_json_files(os.path.join(path_to_json_patient + "_twoline.zip"), os.path.join(path_to_json_patient,"twoLineGraph")))
 
-    os.mkdir(os.path.join(path_to_json_patient,"optimalWarpingPath"))
+    if not path.exists(os.path.join(path_to_json_patient, "optimalWarpingPath")):
+        os.mkdir(os.path.join(path_to_json_patient,"optimalWarpingPath"))
     for i in range(len(vector_arrays_expert)):
         optimal_file = os.path.join(path_to_json_patient,"optimalWarpingPath", "optimalWarping_" + str(i+1) +".png")
         C =  dtw.compute_cost_matrix(vector_arrays_expert[i], vector_arrays_patient[i], metric='euclidean')
