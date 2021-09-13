@@ -73,9 +73,9 @@ if __name__ == '__main__':
         path_to_json_expert = os.path.join(json_exercise, "Expert", "Json")
         path_to_json_patient = os.path.join(json_exercise,"Patient","Json")
 
-        #convert JSON to 50 (25 vertices, X, Y total 50) 1D arrays that are normalized
-        vector_arrays_expert = vector_arrays_from_json(path_to_json_expert)
-        vector_arrays_patient = vector_arrays_from_json(path_to_json_patient)
+    #convert JSON to 50 (25 vertices, X, Y total 50) 1D arrays that are normalized
+    vector_arrays_expert = vector_arrays_from_json(path_to_json_expert)
+    vector_arrays_patient = vector_arrays_from_json(path_to_json_patient)
     
     distances = []
 
