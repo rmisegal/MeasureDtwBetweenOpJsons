@@ -1,4 +1,4 @@
-# MeasureDtwBetweenOpJsons
+# Measure Dtw Between OpenPose Jsons folders
 Measure the Dtw between two Jsons folders that was created with OpenPose
 
 You need first to have two movies:
